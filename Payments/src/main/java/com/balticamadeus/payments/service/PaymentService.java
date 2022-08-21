@@ -35,7 +35,6 @@ public class PaymentService {
 
         PaymentEvent paymentEvent = new PaymentEvent(payment.getId());
         publisher.publishEvent(paymentEvent);
-        System.out.println("Payment " + payment.getPaymentType() + " has been created");
     }
 
     public void createType2Payment(Payment payment) {
@@ -47,11 +46,9 @@ public class PaymentService {
 
         PaymentEvent paymentEvent = new PaymentEvent(payment.getId());
         publisher.publishEvent(paymentEvent);
-        System.out.println("Payment " + payment.getPaymentType() + " has been created");
     }
 
     public void createType3Payment(Payment payment) {
-        payment.setPaymentDetails(null);
         payment.setPaymentType("TYPE3");
         payment.setPaymentValidity("Valid");
         payment.setPaymentDate(LocalDateTime.now());
@@ -59,7 +56,6 @@ public class PaymentService {
 
         PaymentEvent paymentEvent = new PaymentEvent(payment.getId());
         publisher.publishEvent(paymentEvent);
-        System.out.println("Payment " + payment.getPaymentType() + " has been created");
     }
 
     public void cancelPayment(int id) {
@@ -86,9 +82,8 @@ public class PaymentService {
             paymentRepository.findPaymentDateById(id).setPaymentValidity("Invalid");
             paymentRepository.findPaymentDateById(id).setPaymentCancellationFee(cancellationFee);
             paymentRepository.save(paymentRepository.findPaymentDateById(id));
-            System.out.println("Payment " + id + " has been cancelled");
         } else {
-            System.out.println("Payment can't be cancelled");
+            throw new IllegalArgumentException("Payment cannot be cancelled");
         }
     }
 

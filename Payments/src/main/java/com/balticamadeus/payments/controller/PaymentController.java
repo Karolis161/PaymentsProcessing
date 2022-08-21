@@ -11,14 +11,13 @@ import com.balticamadeus.payments.validation.SecondValidation;
 import com.balticamadeus.payments.validation.ThirdValidation;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -45,47 +44,147 @@ public class PaymentController {
         this.notificationsRepository = notificationsRepository;
     }
 
+    @Operation(summary = "Create TYPE1 payment")
     @PostMapping("createType1")
     public void createType1Payment(@Validated(FirstValidation.class) @RequestBody Payment payment) {
-        paymentService.createType1Payment(payment);
+        Logger logger = Logger.getLogger(getClass().getName());
+        try {
+            paymentService.createType1Payment(payment);
+
+            FileHandler handler = new FileHandler("ip.log", true);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logger.addHandler(handler);
+            handler.setFormatter(formatter);
+            logger.info("Payment " + payment.getPaymentType() + " has been created");
+            handler.close();
+        } catch (Exception e) {
+            logger.info("There was an error creating TYPE1 payment");
+        }
     }
 
+    @Operation(summary = "Create TYPE2 payment")
     @PostMapping("createType2")
     public void createType2Payment(@Validated(SecondValidation.class) @RequestBody Payment payment) {
-        paymentService.createType2Payment(payment);
+        Logger logger = Logger.getLogger(getClass().getName());
+        try {
+            paymentService.createType2Payment(payment);
+
+            FileHandler handler = new FileHandler("ip.log", true);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logger.addHandler(handler);
+            handler.setFormatter(formatter);
+            logger.info("Payment " + payment.getPaymentType() + " has been created");
+            handler.close();
+        } catch (Exception e) {
+            logger.info("There was an error creating TYPE2 payment");
+        }
     }
 
+    @Operation(summary = "Create TYPE3 payment")
     @PostMapping("createType3")
     public void createType3Payment(@Validated(ThirdValidation.class) @RequestBody Payment payment) {
-        paymentService.createType3Payment(payment);
+        Logger logger = Logger.getLogger(getClass().getName());
+        try {
+            paymentService.createType3Payment(payment);
+
+            FileHandler handler = new FileHandler("ip.log", true);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logger.addHandler(handler);
+            handler.setFormatter(formatter);
+            logger.info("Payment " + payment.getPaymentType() + " has been created");
+            handler.close();
+        } catch (Exception e) {
+            logger.info("There was an error creating TYPE3 payment");
+        }
     }
 
+    @Operation(summary = "Cancel specific payment")
     @PatchMapping("cancel")
-    public void cancelPayment(@RequestParam int id) {
-        paymentService.cancelPayment(id);
+    public void cancelSpecificPayment(@RequestParam int id) {
+        Logger logger = Logger.getLogger(getClass().getName());
+        try {
+            paymentService.cancelPayment(id);
+
+            FileHandler handler = new FileHandler("ip.log", true);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logger.addHandler(handler);
+            handler.setFormatter(formatter);
+            logger.info("Payment " + id + " has been canceled");
+            handler.close();
+        } catch (Exception e) {
+            logger.info("There was an error cancelling payment");
+        }
     }
 
+    @Operation(summary = "Get valid payments")
     @GetMapping("valid")
     public List<Integer> getValidPayments(@RequestParam String paymentType) {
+        Logger logger = Logger.getLogger(getClass().getName());
+        try {
+            FileHandler handler = new FileHandler("ip.log", true);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logger.addHandler(handler);
+            handler.setFormatter(formatter);
+            logger.info("All valid payments have been received");
+            handler.close();
+        } catch (Exception e) {
+            logger.info("There was an error getting all valid payments");
+        }
         return paymentService.getValidPayments(paymentType);
     }
 
+    @Operation(summary = "Get specific payment")
     @GetMapping("specific")
     public CancellationDetails getSpecificPayment(@RequestParam int id) {
-        var pay = paymentService.getSpecificPayment(id);
-        return pay;
+        Logger logger = Logger.getLogger(getClass().getName());
+        try {
+            FileHandler handler = new FileHandler("ip.log", true);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logger.addHandler(handler);
+            handler.setFormatter(formatter);
+            logger.info("Payment " + id + " has been received");
+            handler.close();
+        } catch (Exception e) {
+            logger.info("There was an error getting specific payment");
+        }
+        return paymentService.getSpecificPayment(id);
     }
 
+    @Operation(summary = "Get all payments")
     @GetMapping("data")
     public List<Payment> getAllPayments() {
+        Logger logger = Logger.getLogger(getClass().getName());
+        try {
+            FileHandler handler = new FileHandler("ip.log", true);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logger.addHandler(handler);
+            handler.setFormatter(formatter);
+            logger.info("All payments have been received");
+            handler.close();
+        } catch (Exception e) {
+            logger.info("There was an error getting all payments");
+        }
         return paymentRepository.findAll();
     }
 
+    @Operation(summary = "Get all notifications")
     @GetMapping("notificationDetails")
     public List<Notification> getNotificationDetails() {
+        Logger logger = Logger.getLogger(getClass().getName());
+        try {
+            FileHandler handler = new FileHandler("ip.log", true);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logger.addHandler(handler);
+            handler.setFormatter(formatter);
+            logger.info("All notifications have been received");
+            handler.close();
+        } catch (Exception e) {
+            logger.info("There was an error getting all notifications");
+        }
         return notificationsRepository.findAll();
     }
 
+    @Operation(summary = "Get user's IP address and country")
     @GetMapping("country")
     public void getCountry() {
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
@@ -97,17 +196,16 @@ public class PaymentController {
         try {
             DatabaseReader dbReader = new DatabaseReader.Builder(database).build();
             CityResponse response = dbReader.city(InetAddress.getByName(ip));
-
             FileHandler handler = new FileHandler("ip.log", true);
-            logger.addHandler(handler);
             SimpleFormatter formatter = new SimpleFormatter();
-            handler.setFormatter(formatter);
 
+            logger.addHandler(handler);
+            handler.setFormatter(formatter);
             logger.info("IP: " + ip);
             logger.info("Country: " + response.getCountry().getName());
+            handler.close();
         } catch (Exception e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "No country has been found with " + ip + " IP address", e);
+            logger.info("No country has been found with " + ip + " IP address");
         }
     }
 }

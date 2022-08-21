@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=Namas1234
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    networks:
+      - spring-cloud-network
+  payments:
+    container_name: payments
+    build:
+      context: Payments
+      dockerfile: Dockerfile
+    image: payments-processing-main:latest
+    environment:
+      spring.datasource.url: jdbc:postgresql://postgres:5432/payments
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./payments:/opt/payments
+    working_dir: /opt/payments
+    networks:
+      - spring-cloud-network
+  notifications:
+    container_name: notifications
+    build:
+      context: Notifications
+      dockerfile: Dockerfile
+    image: payments-processing-notifications:latest
+    environment:
+      spring.datasource.url: jdbc:postgresql://postgres:5432/payments
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./notifications:/opt/notifications
+    working_dir: /opt/notifications
+    networks:
+      - spring-cloud-network
+networks:
+  spring-cloud-network:
+    driver: bridge
+volumes:
+  data: { }

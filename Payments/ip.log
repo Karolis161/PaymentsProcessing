@@ -1,8 +1,14 @@
-Aug 15, 2022 8:26:12 PM com.balticamadeus.payments.controller.PaymentController getIP
-INFO: IP: 0:0:0:0:0:0:0:1
-Aug 15, 2022 8:26:12 PM com.balticamadeus.payments.controller.PaymentController getIP
-INFO: Country: Lithuania
-Aug 15, 2022 8:31:04 PM com.balticamadeus.payments.controller.PaymentController getIP
-INFO: IP: 0:0:0:0:0:0:0:1
-Aug 15, 2022 8:31:04 PM com.balticamadeus.payments.controller.PaymentController getIP
-INFO: Country: Lithuania
+Aug 21, 2022 6:22:55 PM com.balticamadeus.payments.controller.PaymentController getAllPayments
+INFO: All payments have been received
+Aug 21, 2022 6:23:04 PM com.balticamadeus.payments.controller.PaymentController getSpecificPayment
+INFO: Payment 17 has been received
+Aug 21, 2022 6:23:04 PM com.balticamadeus.payments.notification.PaymentEventListener onValidPaymentEvent
+INFO: Status code: 200 OK for payment id: 17
+Aug 21, 2022 6:23:04 PM com.balticamadeus.payments.controller.PaymentController createType1Payment
+INFO: Payment TYPE1 has been created
+Aug 21, 2022 6:23:31 PM com.balticamadeus.payments.controller.PaymentController cancelSpecificPayment
+INFO: Payment 3 has been canceled
+Aug 21, 2022 6:23:41 PM com.balticamadeus.payments.controller.PaymentController getValidPayments
+INFO: All valid payments have been received
+Aug 21, 2022 6:23:46 PM com.balticamadeus.payments.controller.PaymentController getSpecificPayment
+INFO: Payment 5 has been received

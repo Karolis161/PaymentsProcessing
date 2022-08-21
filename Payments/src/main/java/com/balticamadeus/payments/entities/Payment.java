@@ -3,6 +3,7 @@ package com.balticamadeus.payments.entities;
 import com.balticamadeus.payments.validation.FirstValidation;
 import com.balticamadeus.payments.validation.SecondValidation;
 import com.balticamadeus.payments.validation.ThirdValidation;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -25,8 +26,10 @@ public class Payment {
             generator = "payment_sequence"
     )
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private int id;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private String paymentType;
 
     @NotNull(groups = {FirstValidation.class, SecondValidation.class, ThirdValidation.class})
@@ -48,10 +51,13 @@ public class Payment {
     @NotBlank(groups = {ThirdValidation.class})
     private String creditorBankBIC;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private String paymentValidity;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDateTime paymentDate;
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private double paymentCancellationFee;
 
     public Payment() {

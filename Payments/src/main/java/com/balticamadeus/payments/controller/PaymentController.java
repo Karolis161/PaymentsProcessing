@@ -13,7 +13,6 @@ import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -31,11 +30,12 @@ import java.util.logging.SimpleFormatter;
 @RequestMapping("api/admin/payment")
 public class PaymentController {
 
-    @Autowired
-    private ApplicationEventPublisher publisher;
     private final PaymentService paymentService;
     private final PaymentRepository paymentRepository;
     private final NotificationsRepository notificationsRepository;
+    private static final String LOG_NAME = "ip.log";
+    private static final String PAYMENT_NAME = "Payment";
+    private static final String PAYMENT_CREATION = " has been created";
 
     @Autowired
     public PaymentController(PaymentService paymentService, PaymentRepository paymentRepository, NotificationsRepository notificationsRepository) {
@@ -51,11 +51,11 @@ public class PaymentController {
         try {
             paymentService.createType1Payment(payment);
 
-            FileHandler handler = new FileHandler("ip.log", true);
+            FileHandler handler = new FileHandler(LOG_NAME, true);
             SimpleFormatter formatter = new SimpleFormatter();
             logger.addHandler(handler);
             handler.setFormatter(formatter);
-            logger.info("Payment " + payment.getPaymentType() + " has been created");
+            logger.info(PAYMENT_NAME + payment.getPaymentType() + PAYMENT_CREATION);
             handler.close();
         } catch (Exception e) {
             logger.info("There was an error creating TYPE1 payment");
@@ -69,11 +69,11 @@ public class PaymentController {
         try {
             paymentService.createType2Payment(payment);
 
-            FileHandler handler = new FileHandler("ip.log", true);
+            FileHandler handler = new FileHandler(LOG_NAME, true);
             SimpleFormatter formatter = new SimpleFormatter();
             logger.addHandler(handler);
             handler.setFormatter(formatter);
-            logger.info("Payment " + payment.getPaymentType() + " has been created");
+            logger.info(PAYMENT_NAME + payment.getPaymentType() + PAYMENT_CREATION);
             handler.close();
         } catch (Exception e) {
             logger.info("There was an error creating TYPE2 payment");
@@ -87,11 +87,11 @@ public class PaymentController {
         try {
             paymentService.createType3Payment(payment);
 
-            FileHandler handler = new FileHandler("ip.log", true);
+            FileHandler handler = new FileHandler(LOG_NAME, true);
             SimpleFormatter formatter = new SimpleFormatter();
             logger.addHandler(handler);
             handler.setFormatter(formatter);
-            logger.info("Payment " + payment.getPaymentType() + " has been created");
+            logger.info(PAYMENT_NAME + payment.getPaymentType() + PAYMENT_CREATION);
             handler.close();
         } catch (Exception e) {
             logger.info("There was an error creating TYPE3 payment");
@@ -105,11 +105,11 @@ public class PaymentController {
         try {
             paymentService.cancelPayment(id);
 
-            FileHandler handler = new FileHandler("ip.log", true);
+            FileHandler handler = new FileHandler(LOG_NAME, true);
             SimpleFormatter formatter = new SimpleFormatter();
             logger.addHandler(handler);
             handler.setFormatter(formatter);
-            logger.info("Payment " + id + " has been canceled");
+            logger.info(PAYMENT_NAME + id + " has been canceled");
             handler.close();
         } catch (Exception e) {
             logger.info("There was an error cancelling payment");
@@ -121,7 +121,7 @@ public class PaymentController {
     public List<Integer> getValidPayments(@RequestParam String paymentType) {
         Logger logger = Logger.getLogger(getClass().getName());
         try {
-            FileHandler handler = new FileHandler("ip.log", true);
+            FileHandler handler = new FileHandler(LOG_NAME, true);
             SimpleFormatter formatter = new SimpleFormatter();
             logger.addHandler(handler);
             handler.setFormatter(formatter);
@@ -138,11 +138,11 @@ public class PaymentController {
     public CancellationDetails getSpecificPayment(@RequestParam int id) {
         Logger logger = Logger.getLogger(getClass().getName());
         try {
-            FileHandler handler = new FileHandler("ip.log", true);
+            FileHandler handler = new FileHandler(LOG_NAME, true);
             SimpleFormatter formatter = new SimpleFormatter();
             logger.addHandler(handler);
             handler.setFormatter(formatter);
-            logger.info("Payment " + id + " has been received");
+            logger.info(PAYMENT_NAME + id + " has been received");
             handler.close();
         } catch (Exception e) {
             logger.info("There was an error getting specific payment");
@@ -155,7 +155,7 @@ public class PaymentController {
     public List<Payment> getAllPayments() {
         Logger logger = Logger.getLogger(getClass().getName());
         try {
-            FileHandler handler = new FileHandler("ip.log", true);
+            FileHandler handler = new FileHandler(LOG_NAME, true);
             SimpleFormatter formatter = new SimpleFormatter();
             logger.addHandler(handler);
             handler.setFormatter(formatter);
@@ -172,7 +172,7 @@ public class PaymentController {
     public List<Notification> getNotificationDetails() {
         Logger logger = Logger.getLogger(getClass().getName());
         try {
-            FileHandler handler = new FileHandler("ip.log", true);
+            FileHandler handler = new FileHandler(LOG_NAME, true);
             SimpleFormatter formatter = new SimpleFormatter();
             logger.addHandler(handler);
             handler.setFormatter(formatter);
@@ -187,8 +187,7 @@ public class PaymentController {
     @Operation(summary = "Get user's IP address and country")
     @GetMapping("country")
     public void getCountry() {
-        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-                .getRequest();
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String ip = req.getRemoteAddr();
         File database = new File("GeoLite2-City.mmdb");
         Logger logger = Logger.getLogger(getClass().getName());
@@ -196,7 +195,7 @@ public class PaymentController {
         try {
             DatabaseReader dbReader = new DatabaseReader.Builder(database).build();
             CityResponse response = dbReader.city(InetAddress.getByName(ip));
-            FileHandler handler = new FileHandler("ip.log", true);
+            FileHandler handler = new FileHandler(LOG_NAME, true);
             SimpleFormatter formatter = new SimpleFormatter();
 
             logger.addHandler(handler);

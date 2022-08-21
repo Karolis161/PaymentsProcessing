@@ -19,6 +19,7 @@ public class PaymentService {
 
     private final ApplicationEventPublisher publisher;
     private final PaymentRepository paymentRepository;
+    private static final String VALID_PAYMENT = "Valid";
 
     @Autowired
     public PaymentService(PaymentRepository paymentRepository, ApplicationEventPublisher publisher) {
@@ -29,7 +30,7 @@ public class PaymentService {
     public void createType1Payment(Payment payment) {
         payment.setPaymentCurrency("EUR");
         payment.setPaymentType("TYPE1");
-        payment.setPaymentValidity("Valid");
+        payment.setPaymentValidity(VALID_PAYMENT);
         payment.setPaymentDate(LocalDateTime.now());
         paymentRepository.save(payment);
 
@@ -40,7 +41,7 @@ public class PaymentService {
     public void createType2Payment(Payment payment) {
         payment.setPaymentCurrency("USD");
         payment.setPaymentType("TYPE2");
-        payment.setPaymentValidity("Valid");
+        payment.setPaymentValidity(VALID_PAYMENT);
         payment.setPaymentDate(LocalDateTime.now());
         paymentRepository.save(payment);
 
@@ -50,7 +51,7 @@ public class PaymentService {
 
     public void createType3Payment(Payment payment) {
         payment.setPaymentType("TYPE3");
-        payment.setPaymentValidity("Valid");
+        payment.setPaymentValidity(VALID_PAYMENT);
         payment.setPaymentDate(LocalDateTime.now());
         paymentRepository.save(payment);
 
@@ -59,10 +60,8 @@ public class PaymentService {
     }
 
     public void cancelPayment(int id) {
-        String str = paymentRepository.findPaymentDateById(id).getPaymentDate().getYear()
-                + "-" + paymentRepository.findPaymentDateById(id).getPaymentDate().getMonthValue()
-                + "-" + paymentRepository.findPaymentDateById(id).getPaymentDate().getDayOfMonth()
-                + " 00:00";
+        LocalDateTime paymentDate = paymentRepository.findPaymentDateById(id).getPaymentDate();
+        String str = paymentDate.getYear() + "-" + paymentDate.getMonthValue() + "-" + paymentDate.getDayOfMonth() + " 00:00";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm");
         LocalDateTime deadline = LocalDateTime.parse(str, formatter);
 
@@ -79,8 +78,9 @@ public class PaymentService {
         double cancellationFee = hoursInSystem * coefficient;
 
         if (ChronoUnit.MINUTES.between(paymentRepository.findPaymentDateById(id).getPaymentDate(), deadline) < 0) {
-            paymentRepository.findPaymentDateById(id).setPaymentValidity("Invalid");
-            paymentRepository.findPaymentDateById(id).setPaymentCancellationFee(cancellationFee);
+            Payment payment = paymentRepository.findById(id).get();
+            payment.setPaymentValidity("Invalid");
+            payment.setPaymentCancellationFee(cancellationFee);
             paymentRepository.save(paymentRepository.findPaymentDateById(id));
         } else {
             throw new IllegalArgumentException("Payment cannot be cancelled");
@@ -88,7 +88,7 @@ public class PaymentService {
     }
 
     public List<Integer> getValidPayments(String paymentType) {
-        return paymentRepository.findByPaymentValidityAndPaymentType("Valid", paymentType)
+        return paymentRepository.findByPaymentValidityAndPaymentType(VALID_PAYMENT, paymentType)
                 .stream()
                 .map(p -> p.getId())
                 .collect(Collectors.toList());

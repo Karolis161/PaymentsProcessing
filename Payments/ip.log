@@ -12,3 +12,43 @@ Aug 21, 2022 6:23:41 PM com.balticamadeus.payments.controller.PaymentController 
 INFO: All valid payments have been received
 Aug 21, 2022 6:23:46 PM com.balticamadeus.payments.controller.PaymentController getSpecificPayment
 INFO: Payment 5 has been received
+Aug 21, 2022 6:40:32 PM com.balticamadeus.payments.controller.PaymentController getAllPayments
+INFO: All payments have been received
+Aug 21, 2022 6:40:41 PM com.balticamadeus.payments.controller.PaymentController cancelSpecificPayment
+INFO: Payment 5 has been canceled
+Aug 21, 2022 7:04:23 PM com.balticamadeus.payments.controller.PaymentController getAllPayments
+INFO: All payments have been received
+Aug 21, 2022 7:04:28 PM com.balticamadeus.payments.controller.PaymentController getSpecificPayment
+INFO: Payment18 has been received
+Aug 21, 2022 7:04:28 PM com.balticamadeus.payments.notification.PaymentEventListener onValidPaymentEvent
+INFO: Status code: 200 OK for payment id: 18
+Aug 21, 2022 7:04:28 PM com.balticamadeus.payments.controller.PaymentController createType1Payment
+INFO: PaymentTYPE1 has been created
+Aug 21, 2022 7:04:31 PM com.balticamadeus.payments.controller.PaymentController getAllPayments
+INFO: All payments have been received
+Aug 21, 2022 7:05:22 PM com.balticamadeus.payments.controller.PaymentController getSpecificPayment
+INFO: Payment19 has been received
+Aug 21, 2022 7:05:22 PM com.balticamadeus.payments.notification.PaymentEventListener onValidPaymentEvent
+INFO: Status code: 200 OK for payment id: 19
+Aug 21, 2022 7:05:22 PM com.balticamadeus.payments.controller.PaymentController createType2Payment
+INFO: PaymentTYPE2 has been created
+Aug 21, 2022 7:05:23 PM com.balticamadeus.payments.controller.PaymentController getSpecificPayment
+INFO: Payment20 has been received
+Aug 21, 2022 7:05:23 PM com.balticamadeus.payments.notification.PaymentEventListener onValidPaymentEvent
+INFO: Status code: 200 OK for payment id: 20
+Aug 21, 2022 7:05:23 PM com.balticamadeus.payments.controller.PaymentController createType2Payment
+INFO: PaymentTYPE2 has been created
+Aug 21, 2022 7:05:25 PM com.balticamadeus.payments.controller.PaymentController getAllPayments
+INFO: All payments have been received
+Aug 21, 2022 7:05:48 PM com.balticamadeus.payments.controller.PaymentController cancelSpecificPayment
+INFO: Payment4 has been canceled
+Aug 21, 2022 7:05:51 PM com.balticamadeus.payments.controller.PaymentController getAllPayments
+INFO: All payments have been received
+Aug 21, 2022 7:06:08 PM com.balticamadeus.payments.controller.PaymentController getValidPayments
+INFO: All valid payments have been received
+Aug 21, 2022 7:06:11 PM com.balticamadeus.payments.controller.PaymentController getSpecificPayment
+INFO: Payment5 has been received
+Aug 21, 2022 7:06:15 PM com.balticamadeus.payments.controller.PaymentController getSpecificPayment
+INFO: Payment8 has been received
+Aug 21, 2022 7:06:25 PM com.balticamadeus.payments.controller.PaymentController getNotificationDetails
+INFO: All notifications have been received
